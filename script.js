@@ -63,6 +63,11 @@ function renderIframeIfNeeded() {
     iframe.style = `border: 1px solid #ccc; width: ${width}; height: ${height}`;
     container.appendChild(iframe);
 }
-
-renderGraphList();
-renderIframeIfNeeded();
+let graphs = {};
+fetch('https://gist.githubusercontent.com/shibby360/f2942b939c3f94814f8f5011b1eb0939/raw/1e13ac261163715d7ad8fb509128d00aa21a4551/desmosgraphs.json').then(r => {
+    r.json().then(data => {
+        graphs = data;
+        renderGraphList();
+        renderIframeIfNeeded();
+    })
+})
