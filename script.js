@@ -6,18 +6,20 @@ function getQueryParam(param) {
 function renderGraphList() {
     const ul = document.getElementById('graph-list');
     if (!ul) return;
-    Object.entries(graphs).forEach(([code, [name]]) => {
+    ul.innerHTML = '';
+    Object.entries(graphs).forEach(([name, [code]]) => {
         const li = document.createElement('li');
         const a = document.createElement('a');
+        console.log(code, name);
         a.textContent = name;
-        a.href = `?code=${encodeURIComponent(code)}`;
+        a.href = `?name=${encodeURIComponent(name)}`;
         li.appendChild(a);
         ul.appendChild(li);
     });
 }
 
 function renderIframeIfNeeded() {
-    const code = getQueryParam('code');
+    const name = getQueryParam('name');
     const header = document.querySelector('h1');
     const ul = document.getElementById('graph-list');
     const container = document.getElementById('iframe-container');
@@ -25,8 +27,8 @@ function renderIframeIfNeeded() {
     // Remove any existing back button
     let backBtn = document.getElementById('back-btn');
     if (backBtn) backBtn.remove();
-    // If no code param or invalid code, show list and header, hide title
-    if (!code || !(code in graphs)) {
+    // If no name param or invalid name, show list and header, hide title
+    if (!name || !(name in graphs)) {
         if (header) header.style.display = '';
         if (ul) ul.style.display = '';
         // Remove any existing title
@@ -47,7 +49,7 @@ function renderIframeIfNeeded() {
     };
     document.body.appendChild(backBtn);
     // Show graph title
-    const [name, width, height] = graphs[code];
+    const [code, width, height] = graphs[name];
     let title = document.getElementById('graph-title');
     if (!title) {
         title = document.createElement('h2');
@@ -63,10 +65,12 @@ function renderIframeIfNeeded() {
     iframe.style = `border: 1px solid #ccc; width: ${width}; height: ${height}`;
     container.appendChild(iframe);
 }
+
 let graphs = {};
-fetch('https://gist.githubusercontent.com/shibby360/f2942b939c3f94814f8f5011b1eb0939/raw/1e13ac261163715d7ad8fb509128d00aa21a4551/desmosgraphs.json').then(r => {
+fetch('https://gist.githubusercontent.com/shibby360/f2942b939c3f94814f8f5011b1eb0939/raw/desmosgraphs.json').then(r => {
     r.json().then(data => {
         graphs = data;
+        console.log(graphs)
         renderGraphList();
         renderIframeIfNeeded();
     })
