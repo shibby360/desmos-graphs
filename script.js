@@ -67,9 +67,9 @@ function renderIframeIfNeeded() {
 }
 
 let graphs = {};
-fetch('https://gist.githubusercontent.com/shibby360/f2942b939c3f94814f8f5011b1eb0939/raw/desmosgraphs.json').then(r => {
+fetch('https://api.github.com/gists/f2942b939c3f94814f8f5011b1eb0939').then(r => {
     r.json().then(data => {
-        graphs = data;
+        graphs = JSON.parse(data["files"]["desmosgraphs.json"]["content"]);
         console.log(graphs)
         renderGraphList();
         renderIframeIfNeeded();
